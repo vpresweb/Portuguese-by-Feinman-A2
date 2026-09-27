@@ -1,1 +1,36 @@
-# Portuguese-by-Feinman-A2
+# Portuguese by Feinman A2
+
+🇵🇹 **Português Europeu — курс A2** за 12 недель: MQP · Conjuntivo · Passiva · CIPLE · метод Фейнмана.
+
+🌐 **Сайт:** https://vpresweb.github.io/Portuguese-by-Feinman-A2/
+
+Предыдущий уровень — [курс A1](https://github.com/vpresweb/Portuguese-by-Feinman).
+
+Одностраничное приложение без сборки и зависимостей: откройте `index.html` в браузере.
+
+## Структура курса
+
+| Нед. | Тема |
+|---|---|
+| 1 | Pretérito Mais-que-Perfeito (MQP) |
+| 2 | Presente do Conjuntivo — формы |
+| 3 | Conjuntivo — употребление (эмоции, сомнение, союзы, относительные) |
+| 4 | Imperativo (tu / você / vocês, местоимения) |
+| 5 | Futuro do Conjuntivo |
+| 6 | Imperfeito do Conjuntivo и Condicional |
+| 7 | Voz Passiva (ser / estar / se, двойные причастия) |
+| 8 | Местоимения: ênclise, próclise, mesóclise |
+| 9 | Infinitivo Pessoal |
+| 10 | Discurso Indireto |
+| 11 | Коннекторы и письмо (e-mail, текст-мнение) |
+| 12 | CIPLE — подготовка к экзамену |
+
+Каждая неделя содержит разделы: 📅 План (по дням, с чек-листом) · 📖 Теория · ⚙️ Формы · 💡 Употребление · ⚖️ Сравнение · 💬 Диалог (с переводом) · 🎯 Тест · ✍️ Фейнман.
+
+## Озвучка
+
+Нажмите на любой португальский текст — пример, форму в таблице, реплику диалога, вопрос или вариант теста — и браузер произнесёт его голосом `pt-PT` (Web Speech API).
+
+## Прогресс
+
+Отметки плана, результаты тестов (прогресс по темам недели) и тексты Фейнман-объяснений сохраняются в `localStorage` браузера.
