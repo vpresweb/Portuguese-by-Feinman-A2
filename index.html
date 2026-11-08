@@ -1149,10 +1149,18 @@ W.push({
 /* ---------- speech (tap-to-speak, pt-PT) ---------- */
 const SAY_SEL = '.ex b, .content i, .content em, .content b, td, .timeline b, .bub, .q p, .opts label, .week-title';
 const CYR = /[А-Яа-яЁё]/;
+// Голос: pt-PT → любой португальский; локальный (отвечает сразу, без интернета) раньше сетевого.
 function pickVoice(){
   try{
     const vs = speechSynthesis.getVoices() || [];
-    return vs.find(v=>v.lang==='pt-PT') || vs.find(v=>/^pt[-_]PT/i.test(v.lang)) || vs.find(v=>/^pt/i.test(v.lang)) || null;
+    const tests = [v=>v.lang==='pt-PT', v=>/^pt[-_]PT/i.test(v.lang), v=>/^pt/i.test(v.lang)];
+    for (const local of [true, false]){
+      for (const test of tests){
+        const found = vs.find(v=>test(v) && Boolean(v.localService) === local);
+        if (found) return found;
+      }
+    }
+    return null;
   }catch(e){ return null; }
 }
 function utter(text){
@@ -1161,9 +1169,19 @@ function utter(text){
   const v = pickVoice(); if (v) u.voice = v;
   return u;
 }
+// Chrome молча теряет фразу, отправленную сразу после cancel() (проверено с голосами Google),
+// поэтому после прерывания новая фраза уходит с паузой 120 мс; при быстрых нажатиях звучит последняя.
+let speakTimer = null;
+function afterCancel(run){
+  clearTimeout(speakTimer);
+  try{
+    if (speechSynthesis.speaking || speechSynthesis.pending){ speechSynthesis.cancel(); speakTimer = setTimeout(()=>{ try{ run(); }catch(e){} }, 120); }
+    else run();
+  }catch(e){}
+}
 function speak(text){
   if (!('speechSynthesis' in window) || !text) return;
-  try{ speechSynthesis.cancel(); speechSynthesis.speak(utter(text)); }catch(e){}
+  afterCancel(()=>speechSynthesis.speak(utter(text)));
 }
 function sayText(el){
   let t = el.matches('.bub') ? (el.querySelector('.pt')||el).textContent
@@ -1310,8 +1328,7 @@ document.addEventListener('click', (e)=>{
     e.target.textContent = d.classList.contains('show-ru') ? 'Скрыть перевод' : 'Показать перевод';
   }
   if (e.target.id === 'speak'){
-    speechSynthesis.cancel();
-    W[week].dialog.forEach(([,pt])=>speechSynthesis.speak(utter(pt)));
+    afterCancel(()=>W[week].dialog.forEach(([,pt])=>speechSynthesis.speak(utter(pt))));
   }
   if (e.target.id === 'check') checkTest();
   if (e.target.id === 'reset'){ render(); }
